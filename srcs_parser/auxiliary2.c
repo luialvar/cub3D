@@ -30,3 +30,42 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (0);
 }
+
+int	count_array_elements(char **array)
+{
+	int	count;
+
+	count = 0;
+	while ( array[count])
+		count++;
+	return (count);
+}
+
+void	free_array(char **directories)
+{
+	int	i;
+
+	i = 0;
+	while (directories[i] != NULL)
+	{
+		free(directories[i]);
+		i++;
+	}
+	free(directories);
+}
+
+int	count_char(char *str, char c)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
+}

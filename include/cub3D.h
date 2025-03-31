@@ -35,7 +35,7 @@ typedef struct s_player {
 typedef struct s_map {
 	char **grid;    // matriz del mapa, con '1', '0', ' ', 'N', importante tener en cuenta que se pasan ' '
 	int height;     // número de líneas
-	int weight;
+	int width;
 	} t_map;
 	
 typedef struct s_game_data {
@@ -46,22 +46,12 @@ typedef struct s_game_data {
 	t_player player;
 	} t_game_data;
 
-typedef struct s_valid_data {
-	int no_valid;
-	int so_valid; 
-	int we_valid;
-	int ea_valid;
-	int no_invalid;
-	int so_invalid; 
-	int we_invalid;
-	int ea_invalid;
-	int c_valid;
-	int c_invalid; 
-	int f_valid;
-	int f_invalid;
-	} t_valid_data;
+typedef struct s_line_info {
+	int	type;
+	int	error;
+	} t_line_info;
 
-	char	*get_next_line(int fd, int *last);
+	char	*get_next_line(int fd);
 	char	*ft_strdup(const char *s1);
 	char	*ft_strjoin(char const *s1, char const *s2);
 	size_t	ft_strlen(const char *s);
@@ -69,6 +59,19 @@ typedef struct s_valid_data {
 	char	*ft_substr(char const *s, unsigned int start, size_t len);
 	void	*ft_memcpy(void *dest, const void *src, size_t n);
 	int		ft_strncmp(const char *s1, const char *s2, size_t n);
+	void	store_info_line(char *line, t_line_info *info, t_line_info	*line_infos, int *fd);
+	int		line_is_empty(char *line);
+	int 	is_texture_line(char *line, t_line_info *info);
+	int 	is_color_line(char *line, t_line_info *info);
+	int 	is_map_line(char *line);
+	void	check_cub(char **argv);
+	int		check_valid_params(int argc, char **argv);
+	char	**ft_split(char const *s, char c);
+	int		count_array_elements(char **array);
+	void	free_array(char **directories);
+	int		count_char(char *str, char c);
+
+
 
 
 

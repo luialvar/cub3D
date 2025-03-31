@@ -2,7 +2,14 @@ FLAGS = -Wall -Wextra -Werror -g
 
 NAME = cub3D
 
-PARSER_FILES = srcs_parser/get_next_line.c srcs_parser/error_checker.c srcs_parser/libft1.c srcs_parser/libft2.c
+PARSER_FILES = srcs_parser/get_next_line.c \
+				srcs_parser/main.c \
+				srcs_parser/check_program_params.c \
+				srcs_parser/auxiliary1.c \
+				srcs_parser/auxiliary2.c \
+				srcs_parser/storing_lines_type.c \
+				srcs_parser/line_type_decider.c \
+				srcs_parser/ft_split.c
 
 EXEC_FILES = 
 
