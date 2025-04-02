@@ -1,4 +1,4 @@
-#include "../include/cub3D.h"
+#include "../../include/cub3D.h"
 
 static int	ft_num_words(char const *s, char c)
 {

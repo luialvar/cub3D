@@ -70,6 +70,13 @@ typedef struct s_line_info {
 	int		count_array_elements(char **array);
 	void	free_array(char **directories);
 	int		count_char(char *str, char c);
+	int		ft_atoi_rgb(const char *str);
+	void	print_line_infos_testing(t_line_info *line_infos, int total_lines);
+	int		count_lines_and_close(int *fd);
+	int 	check_map_together(t_line_info *line_infos);
+	int		check_valid_info(t_line_info *line_infos);
+
+
 
 
 
