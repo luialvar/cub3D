@@ -7,6 +7,8 @@ int	main(int argc, char **argv) //hacer que el gnl exitee, y ver que pasa con ar
 	t_line_info		*line_infos;
 	int				count_lines;
 	size_t			len;
+	t_game_data		game_data;
+
 
 	fd_cub = check_valid_params(argc, argv);
 	count_lines = count_lines_and_close(&fd_cub);
@@ -37,6 +39,16 @@ int	main(int argc, char **argv) //hacer que el gnl exitee, y ver que pasa con ar
 	}
 	close(fd_cub); //ahora mismo solo hay line_infos alocado
 	//print_line_infos_testing(line_infos, count_lines);
-	check_valid_info(line_infos);
+	if (check_valid_info(line_infos) == 1)
+	{
+		free(line_infos);
+		printf("The map will only be checked in case there are no errors above this\n");
+		return (1);
+	}
 	free(line_infos);
+	store_final_structure(argv[1], &game_data);
+	//print_game_data(&game_data);
+	if (validate_map(&game_data) == 1)
+		return (1);
+	return (0);
 }

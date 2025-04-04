@@ -21,7 +21,7 @@ int check_map_together(t_line_info *line_infos)
 			return_value++;
 			if (map_counter > 1)
 			{
-				printf("Error: More than one valid/invalid map: Map %i between lines %i and %i\n",
+				printf("Error: More than one map: Map %i between lines %i and %i\n",
 					   map_counter - 1, start_line + 1, end_line + 1);
 				return_value = 1;
 			}
@@ -37,7 +37,7 @@ int check_map_together(t_line_info *line_infos)
 	}
 	if (map_counter > 1)
 	{
-		printf("Error: More than one valid/invalid map: Map %i between lines %i and %i\n",
+		printf("Error: More than one map: Map %i between lines %i and %i\n",
 		   map_counter, start_line + 1, end_line + 1);
 	}
 	return (return_value);
@@ -55,7 +55,6 @@ if there is info print the error, and also all the rest errors
 
 If the map is alone together at the bottom, print all the errors
 If there are no errors,
-
 */
 
 int check_after_map(t_line_info *line_infos)
@@ -73,7 +72,7 @@ int check_after_map(t_line_info *line_infos)
 	{
 		if (line_infos[i].type != 0)
 		{
-			printf("Error: Non empty line after the valid/invalid map: Line %i\n", i + 1);
+			printf("Error: Non empty line after the map: Line %i\n", i + 1);
 			return_value = 1;
 		}
 		i++;
@@ -107,6 +106,11 @@ int check_errors_repetitions(int error, t_line_info *line_infos, char *name)
 		}
 		i++;
 	}
+	if (count == 0)
+	{
+		printf("Error: Type (%s) not found in file\n", name);
+		return_value = 1;
+	}
 	if (count > 1)
 		printf("%i\n", previous_error + 1);
 	return (return_value);
@@ -115,7 +119,7 @@ int check_errors_repetitions(int error, t_line_info *line_infos, char *name)
 
 int check_texture(t_line_info line_infos, int i)
 {
-	char color;
+	char *color;
 
 	if (line_infos.type == 2)
 		color = "NO";
@@ -127,22 +131,22 @@ int check_texture(t_line_info line_infos, int i)
 		color = "WE";
 	if (line_infos.error == 1)
 	{
-		printf("Error: Line %i of type %s has an invalid number of arguments\n", i + 1);
+		printf("Error: Line %i of type (%s) has an invalid number of arguments\n", i + 1, color);
 		return (1);
 	}
 	if (line_infos.error == 2)
 	{
-		printf("Error: Line %i of type %s has bad format xpm\n", i + 1);
+		printf("Error: Line %i of type (%s) has bad format xpm\n", i + 1, color);
 		return (1);
 	}
 	if (line_infos.error == 3)
 	{
-		printf("Error: Line %i of type %s has a problem opening the file, ex. no rights or not exists\n", i + 1);
+		printf("Error: Line %i of type (%s) has a problem opening the file, ex. no rights or doesnt exist\n", i + 1, color);
 		return (1);
 	}
 	if (line_infos.error == 4)
 	{
-		printf("Error: Line %i of type %s is a directory\n", i + 1);
+		printf("Error: Line %i of type (%s) is a directory\n", i + 1, color);
 		return (1);
 	}
 	return (0);
@@ -150,7 +154,7 @@ int check_texture(t_line_info line_infos, int i)
 
 int check_color(t_line_info line_infos, int i)
 {
-	char type;
+	char *type;
 
 	if (line_infos.type == 6)
 		type = "C";
@@ -158,17 +162,17 @@ int check_color(t_line_info line_infos, int i)
 		type = "F";
 	if (line_infos.error == 1)
 	{
-		printf("Error: Line %i of type %s has an invalid number of arguments\n", i + 1);
+		printf("Error: Line %i of type (%s) has an invalid number of arguments\n", i + 1, type);
 		return (1);
 	}
 	if (line_infos.error == 2)
 	{
-		printf("Error: Line %i of type %s has bad format number of commas or elements inside commas\n", i + 1);
+		printf("Error: Line %i of type (%s) has bad format number of commas or elements inside commas\n", i + 1, type);
 		return (1);
 	}
 	if (line_infos.error == 3)
 	{
-		printf("Error: Line %i of type %s has bad format in its inside arguments xxx,xxx,xxx\n", i + 1);
+		printf("Error: Line %i of type (%s) has bad format in its inside arguments xxx,xxx,xxx\n", i + 1, type);
 		return (1);
 	}
 	return (0);
@@ -177,8 +181,10 @@ int check_color(t_line_info line_infos, int i)
 int	check_specific_errors(t_line_info *line_infos)
 {
 	int	return_value;
+	int	i;
 
 	return_value = 0;
+	i = 0;
 	while (line_infos[i].type != -2)
 	{
 		if (line_infos[i].type == 2)
@@ -195,7 +201,7 @@ int	check_specific_errors(t_line_info *line_infos)
 			return_value = check_color(line_infos[i], i) || return_value;
 		i++;
 	}
-	return (return_value)
+	return (return_value);
 }
 
 int	print_errors(t_line_info *line_infos)
@@ -214,13 +220,12 @@ int	print_errors(t_line_info *line_infos)
 		}
 		i++;
 	}
-	if (check_errors_repetitions(2, line_infos, "NO") == 1
-		|| check_errors_repetitions(3, line_infos, "SO") == 1
-		|| check_errors_repetitions(4, line_infos, "EA") == 1
-		|| check_errors_repetitions(5, line_infos, "WE") == 1
-		|| check_errors_repetitions(6, line_infos, "C") == 1
-		|| check_errors_repetitions(7, line_infos, "F") == 1)
-		return_value = 1;
+	return_value = check_errors_repetitions(2, line_infos, "NO") || return_value;
+	return_value = check_errors_repetitions(3, line_infos, "SO") || return_value;
+	return_value = check_errors_repetitions(4, line_infos, "EA") || return_value;
+	return_value = check_errors_repetitions(5, line_infos, "WE") || return_value;
+	return_value = check_errors_repetitions(6, line_infos, "C")  || return_value;
+	return_value = check_errors_repetitions(7, line_infos, "F")  || return_value;
 	if (check_specific_errors(line_infos) == 1)
 		return (1);
 	return (return_value);
@@ -250,10 +255,6 @@ int	check_valid_info(t_line_info *line_infos)
 		return (1);
 	}
 	if (return_map == 0)
-	{
-		return_map = print_errors(line_infos);
-		if (return_map == 1)
-			printf("The validation of the map has not been done yet, solve your errors\n");
-	}
+		return (print_errors(line_infos));
 	return (0);
 }

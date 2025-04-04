@@ -22,8 +22,8 @@ typedef struct s_color {
 typedef struct s_textures {
 	char *no_path;
 	char *so_path; 
-	char *we_path;
 	char *ea_path;
+	char *we_path;
 	} t_textures;
 	
 typedef struct s_player {
@@ -75,11 +75,18 @@ typedef struct s_line_info {
 	int		count_lines_and_close(int *fd);
 	int 	check_map_together(t_line_info *line_infos);
 	int		check_valid_info(t_line_info *line_infos);
-
-
-
-
-
-
+	int		print_errors(t_line_info *line_infos);
+	int		check_specific_errors(t_line_info *line_infos);
+	int 	check_color(t_line_info line_infos, int i);
+	int 	check_texture(t_line_info line_infos, int i);
+	int		check_errors_repetitions(int error, t_line_info *line_infos, char *name);
+	int		check_after_map(t_line_info *line_infos);
+	int 	check_map_together(t_line_info *line_infos);
+	int		count_all_char(char *line);
+	void	print_game_data(t_game_data *game_data);
+	void	store_final_structure(char *file, t_game_data *game_data);
+	void	copy_line_with_padding(char *dest, const char *src, int width);
+	int 	validate_map(t_game_data *game_data);
+	
 
 #endif

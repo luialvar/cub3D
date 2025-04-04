@@ -10,8 +10,10 @@ PARSER_FILES = srcs_parser/help_functions/get_next_line.c \
 				srcs_parser/help_functions/auxiliary3.c \
 				srcs_parser/pre_creating_structure/storing_lines_type.c \
 				srcs_parser/pre_creating_structure/line_type_decider.c \
-				srcs_parser/pre_creating_structure/check_valid_map_info.c \
-				srcs_parser/help_functions/ft_split.c
+				srcs_parser/pre_creating_structure/check_info_isvalid.c \
+				srcs_parser/help_functions/ft_split.c \
+				srcs_parser/creating_structure/store_final_structure.c \
+				srcs_parser/creating_structure/validate_map.c
 
 EXEC_FILES = 
 
