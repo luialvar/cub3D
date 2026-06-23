@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   line_type_decider.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luialvar <luialvar@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/09 22:22:32 by luialvar          #+#    #+#             */
+/*   Updated: 2025/08/09 22:22:38 by luialvar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3D.h"
 
 int	line_is_empty(char *line)
@@ -14,14 +26,14 @@ int	line_is_empty(char *line)
 	return (1);
 }
 
-int is_map_line(char *line)
+int	is_map_line(char *line)
 {
 	int	i;
 
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != ' ' && line[i] != '0' && line[i] != '1' 
+		if (line[i] != ' ' && line[i] != '0' && line[i] != '1'
 			&& line[i] != 'N' && line[i] != 'S'
 			&& line[i] != 'E' && line[i] != 'W')
 			return (0);
@@ -30,7 +42,7 @@ int is_map_line(char *line)
 	return (1);
 }
 
-int is_texture_line(char *line, t_line_info *info)
+int	is_texture_line(char *line, t_line_info *info)
 {
 	if (ft_strlen(line) < 3)
 		return (0);
@@ -58,7 +70,7 @@ int is_texture_line(char *line, t_line_info *info)
 		return (0);
 }
 
-int is_color_line(char *line, t_line_info *info)
+int	is_color_line(char *line, t_line_info *info)
 {
 	if (ft_strlen(line) < 2)
 		return (0);

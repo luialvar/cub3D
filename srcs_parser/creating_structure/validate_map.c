@@ -1,24 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_map.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luialvar <luialvar@student.42malaga.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:02:17 by luialvar          #+#    #+#             */
+/*   Updated: 2025/08/07 12:02:19 by luialvar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3D.h"
 
-void	free_all2(t_game_data *game_data)
-{
-	if (game_data->textures.no_path != NULL)
-		free (game_data->textures.no_path);
-	if (game_data->textures.so_path != NULL)
-		free (game_data->textures.so_path);
-	if (game_data->textures.ea_path != NULL)
-		free (game_data->textures.ea_path);
-	if (game_data->textures.we_path != NULL)
-		free (game_data->textures.we_path);
-	free_array(game_data->map.grid);
-}
+/*
 
 int	check_determine_player_position(t_game_data *game_data)
 {
 	int		i;
 	int		j;
-	int 	line;
-	int 	column;
+	int		line;
+	int		column;
 	char	dir;
 	int		count;
 	int		return_value;
@@ -31,16 +32,20 @@ int	check_determine_player_position(t_game_data *game_data)
 	{
 		while (game_data->map.grid[i][j] != '\0')
 		{
-			if (game_data->map.grid[i][j] == 'N' || game_data->map.grid[i][j] == 'S'
-				|| game_data->map.grid[i][j] == 'E' || game_data->map.grid[i][j] == 'W')
+			if (game_data->map.grid[i][j] == 'N' || 
+			game_data->map.grid[i][j] == 'S'
+				|| game_data->map.grid[i][j] == 'E' ||
+				 game_data->map.grid[i][j] == 'W')
 			{
 				if (count == 1)
 				{
-					printf("There is more than one player, %c in line %i and column %i, ", dir, line + 1, column + 1);
+					printf("Error\n There is more than one player,
+					 %c in line %i and column %i, ", dir, line + 1, column + 1);
 					return_value = 1;
 				}
 				if (count > 1)
-					printf("%c in line %i and column %i, ", dir, line + 1, column + 1);
+					printf("%c in line %i and column %i, ",
+						dir, line + 1, column + 1);
 				line = i;
 				column = j;
 				dir = game_data->map.grid[i][j];
@@ -55,24 +60,84 @@ int	check_determine_player_position(t_game_data *game_data)
 		printf("%c in line %i and column %i\n", dir, line + 1, column + 1);
 	else if (count == 0)
 	{
-		printf("There is no player in the map\n");
+		printf("Error\n There is no player in the map\n");
 		return_value = 1;
 	}
 	else
 	{
-		game_data->map.grid[line][column] = '0'; //ver si el personaje esta solo rodeado por unos que hacer
+		game_data->map.grid[line][column] = '0';
 		game_data->player.x = column + 1;
 		game_data->player.y = line + 1;
 		game_data->player.dir = dir;
 	}
 	return (return_value);
 }
+*/
+
+/* 0:i, 1:j, 2:line, 3:column, 4:ret */
+static void	internal_loop(t_game_data *g,
+					int var[5], char *dir, int *count)
+{
+	while (g->map.grid[var[0]] != NULL)
+	{
+		while (g->map.grid[var[0]][var[1]] != '\0')
+		{
+			if (is_player(g->map.grid[var[0]][var[1]]))
+			{
+				if (*count == 1)
+				{
+					printf("Error\n More than 1 player, %c line %i column %i, ",
+						*dir, var[2] + 1, var[3] + 1);
+					var[4] = 1;
+				}
+				if (*count > 1)
+					printf("%c line %i column %i, ",
+						*dir, var[2] + 1, var[3] + 1);
+				var[2] = var[0];
+				var[3] = var[1];
+				*dir = g->map.grid[var[0]][var[1]];
+				(*count)++;
+			}
+			var[1]++;
+		}
+		var[0]++;
+		var[1] = 0;
+	}
+}
+
+int	check_determine_player_position(t_game_data *g)
+{
+	int		var[5];
+	char	dir;
+	int		count;
+
+	var[0] = 0;
+	var[1] = 0;
+	count = 0;
+	var[4] = 0;
+	internal_loop(g, var, &dir, &count);
+	if (count > 1)
+		printf("%c line %i column %i\n", dir, var[2] + 1, var[3] + 1);
+	else if (count == 0)
+	{
+		printf("Error\n There is no player in the map\n");
+		var[4] = 1;
+	}
+	else
+	{
+		g->map.grid[var[2]][var[3]] = '0';
+		g->player.x = var[3] + 1;
+		g->player.y = var[2] + 1;
+		g->player.dir = dir;
+	}
+	return (var[4]);
+}
 
 int	minimum_eigth_ones(t_game_data *game_data)
 {
 	int	number;
 	int	i;
-	int j;
+	int	j;
 
 	number = 0;
 	i = 0;
@@ -92,10 +157,11 @@ int	minimum_eigth_ones(t_game_data *game_data)
 
 int	algorithm_validating_map(t_game_data *game_data)
 {
-	int	i;
-	int	j;
-	char	**grid = game_data->map.grid;
+	int		i;
+	int		j;
+	char	**grid;
 
+	grid = game_data->map.grid;
 	i = 0;
 	while (i < game_data->map.height)
 	{
@@ -118,26 +184,29 @@ int	algorithm_validating_map(t_game_data *game_data)
 	return (0);
 }
 
-int validate_map(t_game_data *game_data)
+int	validate_map(t_game_data *game_data)
 {
 	if (minimum_eigth_ones(game_data) < 8)
 	{
-		printf("Less than 8 ones\n");
+		printf("Error\n Less than 8 ones\n");
 		return (1);
 	}
 	if (check_determine_player_position(game_data) == 1)
 	{
-		free_all2(game_data);
-		printf("Except for the information in the map, the data in the file is correct\n");
+		printf("Except for the information in the map, ");
+		printf("the data in the file is correct\n");
 		return (1);
 	}
 	else
 	{
 		if (algorithm_validating_map(game_data) == 1)
-			printf("There is a 0 touching a space or in a border which is invalid\n");//poner mejores mensajes
+		{
+			printf("Error\n There is a 0 touching a space or ");
+			printf("in a border which is invalid\n");
+			return (1);
+		}
 		else
-			printf("Everything is correct\n");//poner mejores mensajes
-		free_all2(game_data);
+			printf("Everything is correct\n");
 	}
 	return (0);
 }

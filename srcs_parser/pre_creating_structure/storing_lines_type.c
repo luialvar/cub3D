@@ -1,9 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   storing_lines_type.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luialvar <luialvar@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/09 21:11:03 by luialvar          #+#    #+#             */
+/*   Updated: 2025/08/09 21:11:46 by luialvar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/cub3D.h"
 
+	//size_t	len;
+//len = ft_strlen(parts[1]);
+	/*if (len <= 4 || ft_strncmp(parts[1] + len - 4, ".xpm", 4) != 0)
+	{
+		free_array(parts);
+		return (2);
+	}*/
 int	sub_texture(char **parts, char *line, t_line_info *line_infos, int *fd_cub)
 {
-	size_t	len;
-
 	if (!parts)
 	{
 		perror("malloc failed");
@@ -16,12 +33,6 @@ int	sub_texture(char **parts, char *line, t_line_info *line_infos, int *fd_cub)
 	{
 		free_array(parts);
 		return (1);
-	}
-	len = ft_strlen(parts[1]);
-	if (len <= 4 || ft_strncmp(parts[1] + len - 4, ".xpm", 4) != 0)
-	{
-		free_array(parts);
-		return (2);
 	}
 	return (0);
 }
@@ -53,9 +64,10 @@ int	error_checker_texture(char *line, t_line_info *line_infos, int *fd_cub)
 	return (0);
 }
 
+//
 int	sub_color(char **parts, char *line, t_line_info *line_infos, int *fd_cub)
 {
-	char **second_parts;
+	char	**second_parts;
 
 	second_parts = ft_split(parts[1], ',');
 	if (!second_parts)
@@ -69,10 +81,7 @@ int	sub_color(char **parts, char *line, t_line_info *line_infos, int *fd_cub)
 	}
 	free_array(parts);
 	if (count_array_elements(second_parts) != 3)
-	{
-		free_array(second_parts);
-		return (2);
-	}
+		return (free_array(second_parts), 2);
 	if (ft_atoi_rgb(second_parts[0]) == -1 || ft_atoi_rgb(second_parts[1]) == -1
 		|| ft_atoi_rgb(second_parts[2]) == -1)
 	{
@@ -85,7 +94,7 @@ int	sub_color(char **parts, char *line, t_line_info *line_infos, int *fd_cub)
 
 int	error_checker_color(char *line, t_line_info	*line_infos, int *fd_cub)
 {
-	char **parts;
+	char	**parts;
 
 	parts = ft_split(line, ' ');
 	if (!parts)
@@ -109,7 +118,7 @@ int	error_checker_color(char *line, t_line_info	*line_infos, int *fd_cub)
 	return (sub_color(parts, line, line_infos, fd_cub));
 }
 
-void	store_info_line(char *line, t_line_info *info, t_line_info	*line_infos, int *fd)
+void	infoln(char *line, t_line_info *info, t_line_info *line_infos, int *fd)
 {
 	if (line_is_empty(line))
 	{
